@@ -7,7 +7,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
-  await deploy("YourCollectible", {
+  await deploy("MSoccer", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
@@ -15,7 +15,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   });
 
   // Getting a previously deployed contract
-  const yourCollectible = await ethers.getContract("YourCollectible", deployer);
+  const MSoccer = await ethers.getContract("MSoccer", deployer);
 
   // ToDo: Verify your contract with Etherscan for public chains
   // if (chainId !== "31337") {

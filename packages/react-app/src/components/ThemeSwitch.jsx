@@ -23,8 +23,7 @@ export default function ThemeSwitcher() {
 
   return (
     <div className="main fade-in" style={{ position: "fixed", right: 8, bottom: 8 }}>
-      <span style={{ padding: 8 }}>{currentTheme === "light" ? "☀️" : "🌜"}</span>
-      <Switch checked={isDarkMode} onChange={toggleTheme} />
+      <a href="https://github.com/austintgriffith/scaffold-eth">Powered by Scaffold-Eth</a>
     </div>
   );
 }

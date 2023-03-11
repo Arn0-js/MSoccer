@@ -34,17 +34,17 @@ const main = async () => {
 
   const buffalo = {
     description: "It's actually a bison?",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/buffalo.jpg",
-    name: "Buffalo",
+    external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
+    image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmVGK2LcyGLUzHnqCmMdbVVmkJJCFzginM1teNC4gDr3Lh/demi/tet-037-bak-004-col-000-pos-020-cor-001_1.mp4",
+    name: "Kevin",
     attributes: [
       {
         trait_type: "BackgroundColor",
-        value: "green",
+        value: "golden",
       },
       {
         trait_type: "Eyes",
-        value: "googly",
+        value: "YellowLazer",
       },
       {
         trait_type: "Stamina",
@@ -52,7 +52,7 @@ const main = async () => {
       },
     ],
   };
-  console.log("Uploading buffalo...");
+  console.log("Uploading Kevin...");
   const uploaded = await ipfs.add(JSON.stringify(buffalo));
 
   console.log("Minting buffalo with IPFS hash (" + uploaded.path + ")");
@@ -63,10 +63,10 @@ const main = async () => {
   await sleep(delayMS);
 
   const zebra = {
-    description: "What is it so worried about?",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/zebra.jpg",
-    name: "Zebra",
+    description: "Striker",
+    external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
+    image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmNpkE4YSQQHRU7y5trV6Yeh27HiFKKCZ5ryKh1XTuqDjk/demi/tet-016-bak-004-col-000-pos-016-cor-001_1.mp4",
+    name: "Romulus",
     attributes: [
       {
         trait_type: "BackgroundColor",
@@ -93,10 +93,10 @@ const main = async () => {
   await sleep(delayMS);
 
   const rhino = {
-    description: "What a horn!",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/rhino.jpg",
-    name: "Rhino",
+    description: "A star is born",
+    external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
+    image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmWVg84NHhiPdaAyXj9R8oG6sfZZYdF7gnibwuZNxK4EH3/demi/tet-024-bak-005-col-015-pos-021-cor-001_1.mp4",
+    name: "Kyky",
     attributes: [
       {
         trait_type: "BackgroundColor",
@@ -123,10 +123,10 @@ const main = async () => {
   await sleep(delayMS);
 
   const fish = {
-    description: "Is that an underbyte?",
-    external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
-    image: "https://austingriffith.com/images/paintings/fish.jpg",
-    name: "Fish",
+    description: "World Champion",
+    external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
+    image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmUvB6EvTqNUuPRY6ff4hsaEvbVSqYN9iYegVuTC6U5553/demi/tet-002-bak-005-col-015-pos-002-cor-001_1.mp4",
+    name: "La Pulga",
     attributes: [
       {
         trait_type: "BackgroundColor",

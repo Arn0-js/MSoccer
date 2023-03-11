@@ -70,10 +70,10 @@ const NETWORKCHECK = true;
 
 // EXAMPLE STARTING JSON:
 const STARTING_JSON = {
-  description: "Football artist !",
-  external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
+  description: "It's actually a bison?",
+  external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
   image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmVGK2LcyGLUzHnqCmMdbVVmkJJCFzginM1teNC4gDr3Lh/demi/tet-037-bak-004-col-000-pos-020-cor-001_1.mp4",
-  name: "KDB",
+  name: "Buffalo",
   attributes: [
     {
       trait_type: "BackgroundColor",
@@ -275,33 +275,30 @@ function App() {
   ]);
 
   // keep track of a variable from the contract in the local React state:
-  const balance = useContractReader(readContracts, "MSoccer", "balanceOf", [address]);
+  const balance = useContractReader(readContracts, "MafiaFoot", "balanceOf", [address]);
   console.log("🤗 balance:", balance);
 
   // 📟 Listen for broadcast events
-  const transferEvents = useEventListener(readContracts, "MSoccer", "Transfer", localProvider, 1);
+  const transferEvents = useEventListener(readContracts, "MafiaFoot", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
 
   //
-  // 🧠 This effect will update MSoccers by polling when your balance changes
+  // 🧠 This effect will update MafiaFoots by polling when your balance changes
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
-  const [MSoccers, setMSoccers] = useState();
+  const [MafiaFoots, setMafiaFoots] = useState();
 
   useEffect(() => {
-    const updateMSoccers = async () => {
+    const updateMafiaFoots = async () => {
       const collectibleUpdate = [];
       for (let tokenIndex = 0; tokenIndex < balance; tokenIndex++) {
         try {
           console.log("GEtting token index", tokenIndex);
-          const tokenId = await readContracts.MSoccer.tokenOfOwnerByIndex(address, tokenIndex);
+          const tokenId = await readContracts.MafiaFoot.tokenOfOwnerByIndex(address, tokenIndex);
           console.log("tokenId", tokenId);
-          const tokenURI = await readContracts.MSoccer.tokenURI(tokenId);
+          const tokenURI = await readContracts.MafiaFoot.tokenURI(tokenId);
           console.log("tokenURI", tokenURI);
-          const claimed = await readContracts.MSoccer.isClaimed(tokenId);
-          console.log("claimed", claimed);
-          var claimedString; 
-          if(claimed == true) claimedString = "Claimed"; else claimedString = "Unclaimed";
+
           const ipfsHash = tokenURI.replace("https://ipfs.io/ipfs/", "");
           console.log("ipfsHash", ipfsHash);
 
@@ -310,7 +307,7 @@ function App() {
           try {
             const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
             console.log("jsonManifest", jsonManifest);
-            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, claimed: claimedString,...jsonManifest });
+            collectibleUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
           } catch (e) {
             console.log(e);
           }
@@ -318,9 +315,9 @@ function App() {
           console.log(e);
         }
       }
-      setMSoccers(collectibleUpdate);
+      setMafiaFoots(collectibleUpdate);
     };
-    updateMSoccers();
+    updateMafiaFoots();
   }, [address, yourBalance]);
 
   /*
@@ -518,17 +515,16 @@ function App() {
   const [downloading, setDownloading] = useState();
   const [ipfsContent, setIpfsContent] = useState();
   const [transferToAddresses, setTransferToAddresses] = useState({});
-  const [claimBonusAdress, setClaimBonusAdress] = useState({});
   const [minting, setMinting] = useState(false);
   const [count, setCount] = useState(1);
 
   // the json for the nfts
   const json = {
     1: {
-      description: "Football artist!",
-      external_url: "https://www.mafiafoot.com", // <-- this can link to a page for the specific file too
+      description: "It's actually a bison?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
       image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmVGK2LcyGLUzHnqCmMdbVVmkJJCFzginM1teNC4gDr3Lh/demi/tet-037-bak-004-col-000-pos-020-cor-001_1.mp4",
-      name: "KDB",
+      name: "Buffalo",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -545,10 +541,10 @@ function App() {
       ],
     },
     2: {
-      description: "Striker",
-      external_url: "https://www.mafiafoot.com", // <-- this can link to a page for the specific file too
-      image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmNpkE4YSQQHRU7y5trV6Yeh27HiFKKCZ5ryKh1XTuqDjk/demi/tet-016-bak-004-col-000-pos-016-cor-001_1.mp4",
-      name: "Romulus",
+      description: "What is it so worried about?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/zebra.jpg",
+      name: "Zebra",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -565,10 +561,10 @@ function App() {
       ],
     },
     3: {
-      description: "A star is born",
-      external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
-      image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmWVg84NHhiPdaAyXj9R8oG6sfZZYdF7gnibwuZNxK4EH3/demi/tet-024-bak-005-col-015-pos-021-cor-001_1.mp4",
-      name: "Kyky",
+      description: "What a horn!",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/rhino.jpg",
+      name: "Rhino",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -585,10 +581,10 @@ function App() {
       ],
     },
     4: {
-      description: "World Champion",
-      external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
-      image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmUvB6EvTqNUuPRY6ff4hsaEvbVSqYN9iYegVuTC6U5553/demi/tet-002-bak-005-col-015-pos-002-cor-001_1.mp4",
-      name: "La Pulga",
+      description: "Is that an underbyte?",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/fish.jpg",
+      name: "Fish",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -605,10 +601,10 @@ function App() {
       ],
     },
     5: {
-      description: "Himself",
-      external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
-      image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmfX7rSiaGbJ5zpp863JVrF2LgXyozKvMHKTK3LPqgHsLN/demi/tet-014-bak-003-col-000-pos-014-cor-001_1.mp4",
-      name: "CR7",
+      description: "So delicate.",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/flamingo.jpg",
+      name: "Flamingo",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -625,10 +621,10 @@ function App() {
       ],
     },
     6: {
-      description: "Vamos!",
-      external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
-      image: "https://ipfs-mainnet.trnnfr.com/ipfs/QmaMRWw8dqriurNnH3k2YiFE3NK3GjoFtXdyrGhDAFLT4D/demi/tet-010-Demi-Res.mp4",
-      name: "Ronnie",
+      description: "Raaaar!",
+      external_url: "https://austingriffith.com/portfolio/paintings/", // <-- this can link to a page for the specific file too
+      image: "https://austingriffith.com/images/paintings/godzilla.jpg",
+      name: "Godzilla",
       attributes: [
         {
           trait_type: "BackgroundColor",
@@ -653,8 +649,8 @@ function App() {
     console.log("Uploaded Hash: ", uploaded);
     const result = tx(
       writeContracts &&
-        writeContracts.MSoccer &&
-        writeContracts.MSoccer.mintItem(address, uploaded.path),
+        writeContracts.MafiaFoot &&
+        writeContracts.MafiaFoot.mintItem(address, uploaded.path),
       update => {
         console.log("📡 Transaction Update:", update);
         if (update && (update.status === "confirmed" || update.status === 1)) {
@@ -687,17 +683,53 @@ function App() {
               }}
               to="/"
             >
-              MSoccers
+              MafiaFoots
             </Link>
           </Menu.Item>
-          
+          <Menu.Item key="/transfers">
+            <Link
+              onClick={() => {
+                setRoute("/transfers");
+              }}
+              to="/transfers"
+            >
+              Transfers
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/ipfsup">
+            <Link
+              onClick={() => {
+                setRoute("/ipfsup");
+              }}
+              to="/ipfsup"
+            >
+              IPFS Upload
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/ipfsdown">
+            <Link
+              onClick={() => {
+                setRoute("/ipfsdown");
+              }}
+              to="/ipfsdown"
+            >
+              IPFS Download
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/debugcontracts">
+            <Link
+              onClick={() => {
+                setRoute("/debugcontracts");
+              }}
+              to="/debugcontracts"
+            >
+              Debug Contracts
+            </Link>
+          </Menu.Item>
         </Menu>
         <Switch>
           <Route exact path="/">
-            <div style={{ width: 800, heigth: 120, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
-            <img src="./Logo-Mafia-Foot.svg" width={150} /><br/>
-              MFF aims to be one of the first Soccer Management / Tycoon Web3 game. Start to build your team today.<br/>
-              Mint your Ethereum NFT Collectible today, you'll be able to claim later your playable NFT on our gaming blockchain. Download our Wallet !<br/> 
+            <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <Button
                 disabled={minting}
                 shape="round"
@@ -712,7 +744,7 @@ function App() {
             <div style={{ width: 640, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
               <List
                 bordered
-                dataSource={MSoccers}
+                dataSource={MafiaFoots}
                 renderItem={item => {
                   const id = item.id.toNumber();
                   return (
@@ -729,29 +761,34 @@ function App() {
                         </div>
                         <div>{item.description}</div>
                       </Card>
-                       {item.claimed === "Unclaimed" ? (
-                          <div>
-                          <AddressInput
+
+                      <div>
+                        owner:{" "}
+                        <Address
+                          address={item.owner}
                           ensProvider={mainnetProvider}
-                          placeholder="Ternoa Chain address"
-                          value={claimBonusAdress[id]}
+                          blockExplorer={blockExplorer}
+                          fontSize={16}
+                        />
+                        <AddressInput
+                          ensProvider={mainnetProvider}
+                          placeholder="transfer to address"
+                          value={transferToAddresses[id]}
                           onChange={newValue => {
                             const update = {};
                             update[id] = newValue;
-                            setClaimBonusAdress({ ...claimBonusAdress, ...update });
+                            setTransferToAddresses({ ...transferToAddresses, ...update });
                           }}
-                        /> <Button
-                              onClick={() => {
-                                console.log("writeContracts", writeContracts);
-                                tx(writeContracts.MSoccer.redeem(claimBonusAdress[id], id));
-                              }}
-                            >
-                              Claim Bonus
-                            </Button>
-                            </div>
-                          ) : <div>{item.claimed}<br/>
-                          You already have claimed your bonus, you''ll receive it soon on the Ternoa Chain.</div>}
-                     
+                        />
+                        <Button
+                          onClick={() => {
+                            console.log("writeContracts", writeContracts);
+                            tx(writeContracts.MafiaFoot.transferFrom(address, transferToAddresses[id], id));
+                          }}
+                        >
+                          Transfer
+                        </Button>
+                      </div>
                     </List.Item>
                   );
                 }}
@@ -759,7 +796,108 @@ function App() {
             </div>
           </Route>
 
-          
+          <Route path="/transfers">
+            <div style={{ width: 600, margin: "auto", marginTop: 32, paddingBottom: 32 }}>
+              <List
+                bordered
+                dataSource={transferEvents}
+                renderItem={item => {
+                  return (
+                    <List.Item key={item[0] + "_" + item[1] + "_" + item.blockNumber + "_" + item.args[2].toNumber()}>
+                      <span style={{ fontSize: 16, marginRight: 8 }}>#{item.args[2].toNumber()}</span>
+                      <Address address={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> =&gt;
+                      <Address address={item.args[1]} ensProvider={mainnetProvider} fontSize={16} />
+                    </List.Item>
+                  );
+                }}
+              />
+            </div>
+          </Route>
+
+          <Route path="/ipfsup">
+            <div style={{ paddingTop: 32, width: 740, margin: "auto", textAlign: "left" }}>
+              <ReactJson
+                style={{ padding: 8 }}
+                src={yourJSON}
+                theme="pop"
+                enableClipboard={false}
+                onEdit={(edit, a) => {
+                  setYourJSON(edit.updated_src);
+                }}
+                onAdd={(add, a) => {
+                  setYourJSON(add.updated_src);
+                }}
+                onDelete={(del, a) => {
+                  setYourJSON(del.updated_src);
+                }}
+              />
+            </div>
+
+            <Button
+              style={{ margin: 8 }}
+              loading={sending}
+              size="large"
+              shape="round"
+              type="primary"
+              onClick={async () => {
+                console.log("UPLOADING...", yourJSON);
+                setSending(true);
+                setIpfsHash();
+                const result = await ipfs.add(JSON.stringify(yourJSON)); // addToIPFS(JSON.stringify(yourJSON))
+                if (result && result.path) {
+                  setIpfsHash(result.path);
+                }
+                setSending(false);
+                console.log("RESULT:", result);
+              }}
+            >
+              Upload to IPFS
+            </Button>
+
+            <div style={{ padding: 16, paddingBottom: 150 }}>{ipfsHash}</div>
+          </Route>
+          <Route path="/ipfsdown">
+            <div style={{ paddingTop: 32, width: 740, margin: "auto" }}>
+              <Input
+                value={ipfsDownHash}
+                placeHolder="IPFS hash (like QmadqNw8zkdrrwdtPFK1pLi8PPxmkQ4pDJXY8ozHtz6tZq)"
+                onChange={e => {
+                  setIpfsDownHash(e.target.value);
+                }}
+              />
+            </div>
+            <Button
+              style={{ margin: 8 }}
+              loading={sending}
+              size="large"
+              shape="round"
+              type="primary"
+              onClick={async () => {
+                console.log("DOWNLOADING...", ipfsDownHash);
+                setDownloading(true);
+                setIpfsContent();
+                const result = await getFromIPFS(ipfsDownHash); // addToIPFS(JSON.stringify(yourJSON))
+                if (result && result.toString) {
+                  setIpfsContent(result.toString());
+                }
+                setDownloading(false);
+              }}
+            >
+              Download from IPFS
+            </Button>
+
+            <pre style={{ padding: 16, width: 500, margin: "auto", paddingBottom: 150 }}>{ipfsContent}</pre>
+          </Route>
+          <Route path="/debugcontracts">
+            <Contract
+              name="MafiaFoot"  // name of the contract (AB)
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+          </Route>
         </Switch>
       </BrowserRouter>
 
