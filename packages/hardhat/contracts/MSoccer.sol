@@ -24,7 +24,7 @@ contract MSoccer is
     string public _baseTokenURI;
 
     constructor() ERC721("MSoccer", "tMSX") {}
-    
+
     function _baseURI() internal pure override returns (string memory) {
         return "https://ipfs.io/ipfs/";
     }
@@ -62,16 +62,6 @@ contract MSoccer is
     }
  // The following functions are overrides required by Solidity.
 
-
-    return string(
-        abi.encodePacked(
-            "data:application/json;base64,",
-            Base64.encode(dataURI)
-        )
-    );
-}
-
-    // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(
         address from,
