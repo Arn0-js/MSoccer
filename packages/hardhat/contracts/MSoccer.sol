@@ -17,11 +17,9 @@ contract MSoccer is
 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
-    mapping(uint256 => bool) public claims;
-    mapping(uint256 => uint256) public _redeemedTimestamp;
-    mapping(uint256 => string) public extAddresses;
-    string public extInfo;
-    string public _baseTokenURI;
+    mapping(uint256 => bool) public claims;  // Mapping storing the claim status for each NFT.
+    mapping(uint256 => string) public extAddresses; // Mapping storing the claim target adress for each NFT.
+    event redeemed(uint256 tokenId); // redeemed event, in order to refresh the list.
 
     constructor() ERC721("MSoccer", "tMSX") {}
 
@@ -34,23 +32,20 @@ contract MSoccer is
         uint256 tokenId = _tokenIdCounter.current();
         claims[tokenId] = false;
         _safeMint(to, tokenId);
-        console.log('AB ',uri);
         _setTokenURI(tokenId, uri);
-        //console.log('AB ',getTokenURI(tokenId));
         return tokenId;
     }
 
     function redeem(string memory _extInfo, uint256 tokenId) public{
         require(ownerOf(tokenId) == msg.sender, "You cannot redeem this NFT");
-        require(0 == _redeemedTimestamp[tokenId], "This item has already a redeemed timestamp! ");
-        _redeemedTimestamp[tokenId] = block.timestamp;
+        require(false == claims[tokenId], "This item has already been redeemed! ");
         claims[tokenId] = true;
         extAddresses[tokenId] = _extInfo;
+        emit redeemed(tokenId);
     }
 
     function getClaimedAddress(uint256 tokenId) view public returns (string memory){ 
-        address owner = ERC721.ownerOf(tokenId);
-        require(owner == msg.sender, "You cannot check this information");
+        
         require(claims[tokenId], "This item has not been claimed yet!");
         string memory test = extAddresses[tokenId];
         return test;
@@ -61,8 +56,6 @@ contract MSoccer is
         return claims[tokenId]; 
     }
  // The following functions are overrides required by Solidity.
-
-
     function _beforeTokenTransfer(
         address from,
         address to,
