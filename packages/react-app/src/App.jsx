@@ -42,33 +42,12 @@ const ipfs = ipfsAPI({
 
 const { ethers } = require("ethers");
 
-/*
-    Welcome to 🏗 scaffold-eth !
+const targetNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
-    Code:
-    https://github.com/scaffold-eth/scaffold-eth
-
-    Support:
-    https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA
-    or DM @austingriffith on twitter or telegram
-
-    You should get your own Infura.io ID and put it in `constants.js`
-    (this is your connection to the main Ethereum network for ENS etc.)
-
-
-    🌏 EXTERNAL CONTRACTS:
-    You can also bring in contract artifacts in `constants.js`
-    (and then use the `useExternalContractLoader()` hook!)
-*/
-
-/// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS.goerli; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
-
-// 😬 Sorry for all the console logging
 const DEBUG = true;
 const NETWORKCHECK = true;
 
-// EXAMPLE STARTING JSON:
+
 const STARTING_JSON = {
   description: "Football artist !",
   external_url: "https://www.mafiafoot.com/", // <-- this can link to a page for the specific file too
@@ -86,8 +65,6 @@ const STARTING_JSON = {
   ],
 };
 
-// helper function to "Get" from IPFS
-// you usually go content.toString() after this...
 const getFromIPFS = async hashToGet => {
   for await (const file of ipfs.get(hashToGet)) {
     console.log(file.path);
@@ -288,6 +265,8 @@ function App() {
   //
   const yourBalance = balance && balance.toNumber && balance.toNumber();
   const [MSoccers, setMSoccers] = useState();
+  const [updateList, setUpdateList] = useState(false);
+  const [txHash, setTxHash] = useState();
 
   useEffect(() => {
     const updateMSoccers = async () => {
@@ -322,7 +301,7 @@ function App() {
       setMSoccers(collectibleUpdate);
     };
     updateMSoccers();
-  }, [address, yourBalance]);
+  }, [address, yourBalance, updateList]);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -343,18 +322,7 @@ function App() {
       mainnetContracts
     ) {
       console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
-      console.log("🌎 mainnetProvider", mainnetProvider);
-      console.log("🏠 localChainId", localChainId);
-      console.log("👩‍💼 selected address:", address);
-      console.log("🕵🏻‍♂️ selectedChainId:", selectedChainId);
-      console.log("💵 yourLocalBalance", yourLocalBalance ? ethers.utils.formatEther(yourLocalBalance) : "...");
-      console.log("💵 yourMainnetBalance", yourMainnetBalance ? ethers.utils.formatEther(yourMainnetBalance) : "...");
-      console.log("📝 readContracts", readContracts);
-      console.log("🌍 DAI contract on mainnet:", mainnetContracts);
-      console.log("💵 yourMainnetDAIBalance", myMainnetDAIBalance);
-      console.log("🔐 writeContracts", writeContracts);
-    }
-  }, [
+    }}, [
     mainnetProvider,
     address,
     selectedChainId,
@@ -522,6 +490,28 @@ function App() {
   const [claimBonusAdress, setClaimBonusAdress] = useState({});
   const [minting, setMinting] = useState(false);
   const [count, setCount] = useState(1);
+
+  // define function to listen for tx confirmation and update the list
+const handleConfirmation = async (txHash) => {
+  const receipt = await localProvider.getTransactionReceipt(txHash);
+  if (receipt && receipt.status === 1) {
+    // transaction succeeded, update the list
+    setUpdateList(prev => !prev);
+  }
+};
+  // call the redeem function and listen for tx confirmation
+const handleRedeem = async (id) => {
+  const tx = await writeContracts.MSoccer.redeem(claimBonusAdress[id], id);
+  setTxHash(tx.hash);
+};
+// listen for changes in the tx status and update the list
+useEffect(() => {
+  if (txHash) {
+    localProvider.waitForTransaction(txHash)
+      .then(() => handleConfirmation(txHash))
+      .catch((err) => console.error(err));
+  }
+}, [txHash, localProvider]);
 
   // the json for the nfts
   const json = {
@@ -743,9 +733,7 @@ function App() {
                           }}
                         /> <Button
                               onClick={() => {
-                                console.log("writeContracts", writeContracts);
-                                tx(writeContracts.MSoccer.redeem(claimBonusAdress[id], id));
-                                
+                                handleRedeem(id);
                               }}
                             >
                               Claim Bonus
